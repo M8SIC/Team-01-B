@@ -1,6 +1,6 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
-namespace Alarm501_MC
+namespace Alarm501_Console
 {
     public delegate void ParameterlessFunc();
     public delegate void PassListOfIntFunc(List<int> i);
