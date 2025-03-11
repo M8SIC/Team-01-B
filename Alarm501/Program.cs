@@ -29,7 +29,7 @@ namespace Alarm501
             Alarm501 alarm501 = new Alarm501();
             AlarmCore alarmCore = new AlarmCore(alarm501.RefreshList, alarm501.SetAddBtnEnableTo, alarm501.GetCurrentSelectedIndex, alarm501.NotifyAlarmRing);
 
-            alarm501.Init(alarmCore.SnoozeAlarm, alarmCore.GetAlarms, alarmCore.AddAlarm, alarmCore.UpdateAlarm, alarmCore.CheckRepeatOption, alarmCore.ToggleActiveState, alarmCore.DeleteAlarm, alarmCore.GetAllAlarms);
+            alarm501.Init(alarmCore.SnoozeAlarm, alarmCore.GetAlarmsByState, alarmCore.AddAlarm, alarmCore.UpdateAlarm, alarmCore.CheckRepeatOption, alarmCore.ToggleActiveState, alarmCore.DeleteAlarm);
             alarmCore.Init();
 
             Application.Run(alarm501);

@@ -15,6 +15,11 @@ namespace Alarm501
     public class Alarm : EventArgs, INotifyPropertyChanged
     {
         #region Fields/Property/Events
+
+        public static BindingList<Alarm>? _listOfAlarms = null;
+        public static BindingList<Alarm> _listOfActiveAlarms = new BindingList<Alarm>();
+        public static BindingList<Alarm> _listOfInactiveAlarms = new BindingList<Alarm>();
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
@@ -70,7 +75,7 @@ namespace Alarm501
         }
         #endregion
 
-        #region Methods
+        #region Constructor/Methods
         public Alarm(DateTime dateTime, bool isOn, AlarmSound alarmSound, string alarmName, string repeatOption) {
             DefaultTime = dateTime;
             AlarmDateTime = dateTime;

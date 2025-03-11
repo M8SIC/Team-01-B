@@ -13,18 +13,16 @@ namespace Alarm501
 {
     public class AlarmCore
     {
-        private BindingList<Alarm>? _listOfAlarms = null;
-
-        private BindingList<Alarm> _listOfActiveAlarms = new BindingList<Alarm>();
-        private BindingList<Alarm> _listOfInactiveAlarms = new BindingList<Alarm>();
-
+        #region Fields/Property/Events
         private bool _activeState = true;
 
         private ParameterlessFunc refreshList;
         private SetButtonEnableTo setAddBtnEnableTo;
         private GetCurrentSelectedIndex getCurrentSelectedIndex;
         private SendAlarmFunc notifyAlarmRing;
+        #endregion
 
+        #region Constructor/Methods
         public AlarmCore(ParameterlessFunc refreshList, SetButtonEnableTo setAddBtnEnableTo, GetCurrentSelectedIndex getCurrentSelectedIndex, SendAlarmFunc notifyAlarmRing)
         {
             this.refreshList = refreshList;
@@ -41,24 +39,23 @@ namespace Alarm501
 
         public void ToggleActiveState() => _activeState = !_activeState;
 
-        public BindingList<Alarm>? GetAllAlarms() => _listOfAlarms;
-        public BindingList<Alarm>? GetAlarms() => (_activeState) ? _listOfActiveAlarms : _listOfInactiveAlarms;
+        public BindingList<Alarm>? GetAlarmsByState() => (_activeState) ? Alarm._listOfActiveAlarms : Alarm._listOfInactiveAlarms;
         public void UpdateAlarm(Alarm alarm)
         {
-            BindingList<Alarm>? alarmListToAddTo = (alarm.IsON) ? _listOfActiveAlarms : _listOfInactiveAlarms;
+            BindingList<Alarm>? alarmListToAddTo = (alarm.IsON) ? Alarm._listOfActiveAlarms : Alarm._listOfInactiveAlarms;
             int newIndex = getCurrentSelectedIndex();
 
-            if (_activeState && alarmListToAddTo != _listOfActiveAlarms)
+            if (_activeState && alarmListToAddTo != Alarm._listOfActiveAlarms)
             {
-                _listOfActiveAlarms.RemoveAt(getCurrentSelectedIndex());
-                _listOfInactiveAlarms.Add(alarm);
-                newIndex = _listOfInactiveAlarms.Count - 1;
+                Alarm._listOfActiveAlarms.RemoveAt(getCurrentSelectedIndex());
+                Alarm._listOfInactiveAlarms.Add(alarm);
+                newIndex = Alarm._listOfInactiveAlarms.Count - 1;
             }
-            else if(!_activeState && alarmListToAddTo == _listOfActiveAlarms)
+            else if(!_activeState && alarmListToAddTo == Alarm._listOfActiveAlarms)
             {
-                _listOfInactiveAlarms.RemoveAt(getCurrentSelectedIndex());
-                _listOfActiveAlarms.Add(alarm);
-                newIndex = _listOfActiveAlarms.Count - 1;
+                Alarm._listOfInactiveAlarms.RemoveAt(getCurrentSelectedIndex());
+                Alarm._listOfActiveAlarms.Add(alarm);
+                newIndex = Alarm._listOfActiveAlarms.Count - 1;
 
             }
             else
@@ -72,7 +69,7 @@ namespace Alarm501
       
         public void CheckIfAlarmClockIsAtLimit()
         {
-            setAddBtnEnableTo(_listOfAlarms!.Count < 5);
+            setAddBtnEnableTo(Alarm._listOfAlarms!.Count < 5);
         }
      
         private void LoadAlarms()
@@ -81,43 +78,43 @@ namespace Alarm501
             {
                 string json = File.ReadAllText("alarms.txt");
 
-                _listOfAlarms = JsonConvert.DeserializeObject<BindingList<Alarm>>(json)!;
+                Alarm._listOfAlarms = JsonConvert.DeserializeObject<BindingList<Alarm>>(json)!;
 
-                if (_listOfAlarms != null)
+                if (Alarm._listOfAlarms != null)
                 {
                     CheckIfAlarmClockIsAtLimit();
-                    foreach (Alarm alarm in _listOfAlarms)
+                    foreach (Alarm alarm in Alarm._listOfAlarms)
                     {
-                        if (!alarm.IsON) _listOfInactiveAlarms.Add(alarm);
-                        else _listOfActiveAlarms.Add(alarm);
+                        if (!alarm.IsON) Alarm._listOfInactiveAlarms.Add(alarm);
+                        else Alarm._listOfActiveAlarms.Add(alarm);
 
                         InitAlarm(alarm);
                     }
                 }
             }
 
-            if (_listOfAlarms == null)
+            if (Alarm._listOfAlarms == null)
             {
-                _listOfAlarms = new BindingList<Alarm>();
+                Alarm._listOfAlarms = new BindingList<Alarm>();
             }
         }
         private void SaveAlarms()
         {
-            _listOfAlarms!.Clear();
-            foreach(Alarm alarm in _listOfActiveAlarms) _listOfAlarms.Add(alarm);
-            foreach (Alarm alarm in _listOfInactiveAlarms) _listOfAlarms.Add(alarm);
+            Alarm._listOfAlarms!.Clear();
+            foreach(Alarm alarm in Alarm._listOfActiveAlarms) Alarm._listOfAlarms.Add(alarm);
+            foreach (Alarm alarm in Alarm._listOfInactiveAlarms) Alarm._listOfAlarms.Add(alarm);
 
-            File.WriteAllText("alarms.txt", JsonConvert.SerializeObject(_listOfAlarms));
+            File.WriteAllText("alarms.txt", JsonConvert.SerializeObject(Alarm._listOfAlarms));
         }
 
         public void DeleteAlarm(List<int> alarmIndex)
         {
             List<Alarm> alarmsToDelete = new List<Alarm>();
-            foreach(int index in alarmIndex) { alarmsToDelete.Add(_listOfAlarms![index]); };
+            foreach(int index in alarmIndex) { alarmsToDelete.Add(Alarm._listOfAlarms![index]); };
 
             foreach (Alarm alarm in alarmsToDelete)
             {
-                BindingList<Alarm>? alarmListStoredIn= (alarm.IsON) ? _listOfActiveAlarms : _listOfInactiveAlarms;
+                BindingList<Alarm>? alarmListStoredIn= (alarm.IsON) ? Alarm._listOfActiveAlarms : Alarm._listOfInactiveAlarms;
                 alarmListStoredIn.Remove(alarm);
             }
          
@@ -156,9 +153,9 @@ namespace Alarm501
 
         public void AddAlarm(Alarm alarm)
         {
-            BindingList<Alarm>? alarmList = (alarm.IsON) ? _listOfActiveAlarms : _listOfInactiveAlarms;
+            BindingList<Alarm>? alarmList = (alarm.IsON) ? Alarm._listOfActiveAlarms : Alarm._listOfInactiveAlarms;
 
-            _listOfAlarms!.Add(alarm);
+            Alarm._listOfAlarms!.Add(alarm);
             alarmList!.Add(alarm);
             SaveAlarms();
 
@@ -166,6 +163,6 @@ namespace Alarm501
             InitAlarm(alarm);
             refreshList();
         }
-
+        #endregion
     }
 }

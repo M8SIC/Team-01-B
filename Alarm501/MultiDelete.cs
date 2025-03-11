@@ -12,8 +12,11 @@ namespace Alarm501
 {
     public partial class MultiDelete : Form
     {
+        #region Fields/Property/Events
         private PassListOfIntFunc DeleteAlarm;
+        #endregion
 
+        #region Constructor/Methods
         public MultiDelete(BindingList<Alarm> alarmList, PassListOfIntFunc DeleteAlarm)
         {
             InitializeComponent();
@@ -45,5 +48,6 @@ namespace Alarm501
 
             this.Close();
         }
+        #endregion
     }
 }

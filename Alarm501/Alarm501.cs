@@ -19,11 +19,10 @@ namespace Alarm501
 {
     public partial class Alarm501 : Form
     {
-
+        #region Fields/Property/Events
         private SendAlarmFuncWithSnoozeTime SnoozeAlarm;
 
-        private GetAlarmList getAlarmList;
-        private GetAlarmList getAllAlarms;
+        private GetAlarmList GetAlarmsByState;
 
         private SendAlarmFunc AddAlarm;
         private SendAlarmFunc UpdateAlarm;
@@ -31,24 +30,24 @@ namespace Alarm501
         private PassListOfIntFunc DeleteAlarm;
 
         private ParameterlessFunc toggleActiveState;
+        #endregion
 
-
+        #region Constructor/Methods
         public Alarm501()
         {
             InitializeComponent();
             UpdateEditButtonStatus(null!, null!);
         }
 
-        public void Init(SendAlarmFuncWithSnoozeTime SnoozeAlarm, GetAlarmList getAlarmList, SendAlarmFunc AddAlarm, SendAlarmFunc UpdateAlarm, SendAlarmFunc CheckRepeatOption, ParameterlessFunc ToggleActiveState, PassListOfIntFunc DeleteAlarm, GetAlarmList getAllAlarms)
+        public void Init(SendAlarmFuncWithSnoozeTime SnoozeAlarm, GetAlarmList GetAlarmsByState, SendAlarmFunc AddAlarm, SendAlarmFunc UpdateAlarm, SendAlarmFunc CheckRepeatOption, ParameterlessFunc ToggleActiveState, PassListOfIntFunc DeleteAlarm)
         {
             this.SnoozeAlarm = SnoozeAlarm;
-            this.getAlarmList = getAlarmList;
+            this.GetAlarmsByState = GetAlarmsByState;
             this.AddAlarm = AddAlarm;
             this.UpdateAlarm = UpdateAlarm;
             this.CheckRepeatOption = CheckRepeatOption;
             this.toggleActiveState = ToggleActiveState;
             this.DeleteAlarm = DeleteAlarm;
-            this.getAllAlarms = getAllAlarms;
         }
 
         public int GetCurrentSelectedIndex() => UxAlarmList.SelectedIndex;
@@ -63,7 +62,7 @@ namespace Alarm501
 
         private void OnEditButtonClick(object sender, EventArgs e)
         {
-            AddEditAlarm addEditAlarm = new AddEditAlarm(getAlarmList()![UxAlarmList.SelectedIndex], AddAlarm, UpdateAlarm);
+            AddEditAlarm addEditAlarm = new AddEditAlarm(GetAlarmsByState()![UxAlarmList.SelectedIndex], AddAlarm, UpdateAlarm);
             addEditAlarm.ShowDialog();
         }
 
@@ -83,7 +82,7 @@ namespace Alarm501
         public void RefreshList()
         {
             UxAlarmList.DataSource = null;
-            UxAlarmList.DataSource = getAlarmList();
+            UxAlarmList.DataSource = GetAlarmsByState();
             UxAlarmList.DisplayMember = "AlarmTimeFormat";
         }
 
@@ -105,8 +104,10 @@ namespace Alarm501
 
         private void uxDeleteBtn_Click(object sender, EventArgs e)
         {
-            MultiDelete multiDeleteMenu = new MultiDelete(getAllAlarms()!, DeleteAlarm);
+            MultiDelete multiDeleteMenu = new MultiDelete(Alarm._listOfAlarms!, DeleteAlarm);
             multiDeleteMenu.ShowDialog();
         }
+
+        #endregion
     }
 }

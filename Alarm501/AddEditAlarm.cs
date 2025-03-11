@@ -13,10 +13,13 @@ namespace Alarm501
 {
     public partial class AddEditAlarm : Form
     {
+        #region Fields/Property/Events
         private bool _isInEdit;
         private SendAlarmFunc AddAlarm;
         private SendAlarmFunc UpdateAlarm;
+        #endregion
 
+        #region Constructor/Methods
         public AddEditAlarm(Alarm? alarm, SendAlarmFunc AddAlarm, SendAlarmFunc UpdateAlarm)
         {
             InitializeComponent();
@@ -62,7 +65,7 @@ namespace Alarm501
         {
             this.Close();
         }
-
+        #endregion
 
     }
 }
