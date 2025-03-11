@@ -1,3 +1,4 @@
+using Alarm501_GUI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -5,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Alarm501
+namespace Alarm501_GUI
 {
     public delegate void ParameterlessFunc();
     public delegate void PassListOfIntFunc(List<int> i);
@@ -14,7 +15,6 @@ namespace Alarm501
     public delegate BindingList<Alarm>? GetAlarmList();
     public delegate void SendAlarmFunc(Alarm alarm);
     public delegate void SendAlarmFuncWithSnoozeTime(Alarm alarm, int snoozeTime);
-
     static class Program
     {
         /// <summary>

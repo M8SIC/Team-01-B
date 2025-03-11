@@ -15,7 +15,7 @@ using System.Collections.Concurrent;
 using System.Security.Claims;
 
 
-namespace Alarm501
+namespace Alarm501_GUI
 {
     public partial class Alarm501 : Form
     {

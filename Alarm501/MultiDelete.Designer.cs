@@ -1,4 +1,4 @@
-﻿namespace Alarm501
+﻿namespace Alarm501_GUI
 {
     partial class MultiDelete
     {

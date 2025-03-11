@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Alarm501
+namespace Alarm501_GUI
 {
     public partial class AddEditAlarm : Form
     {
@@ -37,6 +37,7 @@ namespace Alarm501
             uxDaily.Checked = alarm.RepeatOption == "Daily";
             uxWeekly.Checked = alarm.RepeatOption == "Weekly";
 
+            cmbSounds.SelectedItem = alarm.AlarmSound;
         }
 
         private string GetChosenRepeatOption()

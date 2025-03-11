@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Alarm501
+namespace Alarm501_GUI
 {
     partial class AddEditAlarm
     {

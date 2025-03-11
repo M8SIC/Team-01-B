@@ -1,4 +1,4 @@
-﻿namespace Alarm501
+﻿namespace Alarm501_GUI
 {
     partial class Alarm501
     {
@@ -126,7 +126,7 @@
             uxDeleteBtn.UseVisualStyleBackColor = true;
             uxDeleteBtn.Click += uxDeleteBtn_Click;
             // 
-            // Alarm501
+            // Alarm501_GUI
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -140,8 +140,8 @@
             Controls.Add(UxAddBtn);
             Controls.Add(UxEditBtn);
             Margin = new Padding(2);
-            Name = "Alarm501";
-            Text = "Alarm501";
+            Name = "Alarm501_GUI";
+            Text = "Alarm501_GUI";
             ((System.ComponentModel.ISupportInitialize)uxSnoozeTime).EndInit();
             ResumeLayout(false);
             PerformLayout();

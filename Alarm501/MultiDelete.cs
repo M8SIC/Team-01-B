@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Alarm501
+namespace Alarm501_GUI
 {
     public partial class MultiDelete : Form
     {
