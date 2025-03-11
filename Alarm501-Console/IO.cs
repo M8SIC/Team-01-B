@@ -8,21 +8,22 @@ namespace Alarm501_Console
 {
     public static class IO
     {
+
         public static string GetTaskInput()
         {
-            string[] possibleTasks = {"Add Alarm", "Edit Alarm", "Select A Alarm", "Quit"};
-            do{
-                try
-                {
-                    Console.WriteLine($"Please Choose What To Do Next: (1-{possibleTasks.Length})");
-                    for(int i = 0;i<possibleTasks.Length;i++) Console.WriteLine($"({i+1}) {possibleTasks[i]}");
-                    int task = Convert.ToInt32(Console.ReadLine());
+            string[] possibleTasks = { "Add Alarm", "Edit Alarm", "Select A Alarm", "Quit" };
 
-                    if (task < 1 || task > possibleTasks.Length) throw new Exception();
-                    return possibleTasks[task-1].ToString();
+            try
+            {
+                Console.WriteLine($"Please Choose What To Do Next: (1-{possibleTasks.Length})");
+                for (int i = 0; i < possibleTasks.Length; i++) Console.WriteLine($"({i + 1}) {possibleTasks[i]}");
 
-                }catch (Exception e){ Console.WriteLine("Invalid Option\n"); }
-            }while(true);
+                int task = Convert.ToInt32(Console.ReadLine());
+                if (task < 1 || task > possibleTasks.Length) throw new Exception();
+
+                return possibleTasks[task - 1].ToString();
+            }
+            catch (Exception e) { Console.WriteLine("Invalid Option\n"); return GetTaskInput(); }
         }
     }
 }
