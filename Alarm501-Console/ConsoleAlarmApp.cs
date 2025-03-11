@@ -13,9 +13,9 @@ namespace Alarm501_Console
         {
             do
             {
-
+                Console.WriteLine("Action DONE\n");
               
-            }while (true);
+            }while(IO.GetTaskInput() != "Quit");
         }
     }
 }
