@@ -14,6 +14,7 @@ namespace Alarm501_Console
             switch (IO.GetTaskInput())
             {
                 case "Add Alarm":
+                    ShowAddAlarmView();
                     break;
                 case "Quit":
                     Environment.Exit(0);
