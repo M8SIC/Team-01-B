@@ -11,7 +11,6 @@ namespace Alarm501_Console
         public ConsoleAlarmApp() { }
         public void Start()
         {
-
             switch (IO.GetTaskInput())
             {
                 case "Add Alarm":
