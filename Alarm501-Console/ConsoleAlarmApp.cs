@@ -13,9 +13,27 @@ namespace Alarm501_Console
         {
             do
             {
+                switch(IO.GetTaskInput())
+                {
+                    case "Add Alarm":
+                        break;
+                    case "Quit":
+                        Environment.Exit(0);
+                        break;
+                } 
                 Console.WriteLine("Action DONE\n");
-              
-            }while(IO.GetTaskInput() != "Quit");
+            } while (true);
         }
+
+        public void ShowEditView()
+        {
+
+        }
+
+        public void ShowAddAlarmView()
+        {
+
+        }
+
     }
 }
