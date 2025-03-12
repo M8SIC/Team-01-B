@@ -8,13 +8,6 @@ using System.Windows.Forms;
 
 namespace Alarm501_GUI
 {
-    public delegate void ParameterlessFunc();
-    public delegate void PassListOfIntFunc(List<int> i);
-    public delegate void SetButtonEnableTo(bool enabled);
-    public delegate int GetCurrentSelectedIndex();
-    public delegate BindingList<Alarm>? GetAlarmList();
-    public delegate void SendAlarmFunc(Alarm alarm);
-    public delegate void SendAlarmFuncWithSnoozeTime(Alarm alarm, int snoozeTime);
     static class Program
     {
         /// <summary>
