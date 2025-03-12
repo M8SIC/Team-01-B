@@ -43,20 +43,16 @@ namespace Alarm501_MC
         public void UpdateAlarm(Alarm alarm)
         {
             BindingList<Alarm>? alarmListToAddTo = (alarm.IsON) ? Alarm._listOfActiveAlarms : Alarm._listOfInactiveAlarms;
-            int newIndex = getCurrentSelectedIndex();
 
             if (_activeState && alarmListToAddTo != Alarm._listOfActiveAlarms)
             {
                 Alarm._listOfActiveAlarms.RemoveAt(getCurrentSelectedIndex());
                 Alarm._listOfInactiveAlarms.Add(alarm);
-                newIndex = Alarm._listOfInactiveAlarms.Count - 1;
             }
             else if(!_activeState && alarmListToAddTo == Alarm._listOfActiveAlarms)
             {
                 Alarm._listOfInactiveAlarms.RemoveAt(getCurrentSelectedIndex());
                 Alarm._listOfActiveAlarms.Add(alarm);
-                newIndex = Alarm._listOfActiveAlarms.Count - 1;
-
             }
             else
             {
@@ -64,7 +60,7 @@ namespace Alarm501_MC
             }
            
             SaveAlarms();
-            InitAlarm(alarmListToAddTo[newIndex]);
+            InitAlarm(alarm);
         }
       
         public void CheckIfAlarmClockIsAtLimit()

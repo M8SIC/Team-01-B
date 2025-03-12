@@ -14,6 +14,7 @@ namespace Alarm501_MC
         #region Fields/Property/Events
 
         public static BindingList<Alarm>? _listOfAlarms = null;
+
         public static BindingList<Alarm> _listOfActiveAlarms = new BindingList<Alarm>();
         public static BindingList<Alarm> _listOfInactiveAlarms = new BindingList<Alarm>();
 
