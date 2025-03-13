@@ -8,6 +8,11 @@ namespace Alarm501_Console
 {
     public class ConsoleAlarmApp
     {
+        #region Fields/Property/Events
+        private int snoozeTime;
+
+        #endregion
+
         public ConsoleAlarmApp() { }
         public void Start()
         {
@@ -22,9 +27,6 @@ namespace Alarm501_Console
                     case "Edit Alarm":
                         ShowEditView();
                         break;
-                    case "Select A Alarm":
-                      //  ShowSelectAlarmView();
-                        break;
                     case "Change Snooze Period":
                         ShowChangeSnoozePeriodView();
                         break;
@@ -38,11 +40,28 @@ namespace Alarm501_Console
 
         public void ShowEditView()
         {
+            Alarm alarm = ShowSelectAlarmView();
 
+            switch (IO.GetTaskInput("Add/EditAlarmMainTasks"))
+            {
+                case "Change Time":
+                    alarm.AlarmDateTime = IO.GetTimeInput();
+                    break;
+                case "Change Repeat":
+                    break;
+                case "Change Sound":
+                    break;
+                case "Create Alarm":
+                    break;
+                case "Cancel":
+                    break;
+
+            }
         }
 
         public void ShowChangeSnoozePeriodView()
         {
+            snoozeTime = IO.ChangeSnoozePeriod();         
 
         }
 
@@ -51,14 +70,16 @@ namespace Alarm501_Console
             IO.GetTaskInput("AddAlarmMainTasks");
         }
 
-        public void ShowSelectAlarmView()
+        public Alarm ShowSelectAlarmView()
         {
 
             List<string> alarms = new();
             foreach (Alarm alarm in Alarm._listOfAlarms!) alarms.Add(alarm.AlarmTimeFormat);
             alarms.Add("Select Alarm Menu");
 
-            IO.GetTaskInput("SelectAlarmTasks");
+            IO.TaskOptions["SelectAlarmTasks"] = alarms;
+
+            return Alarm._listOfAlarms[Convert.ToInt32(IO.GetTaskInput("SelectAlarmTasks"))-1];
         }
 
     }

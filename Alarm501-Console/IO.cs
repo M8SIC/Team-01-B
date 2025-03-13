@@ -11,10 +11,9 @@ namespace Alarm501_Console
         public static Dictionary<string, List<string>> TaskOptions = new Dictionary<string, List<string>>() //Last element in dictionary is the location.
         {
             ["MainMenuTasks"] =  new List<string>{ "Add Alarm", "Edit Alarm", "Select A Alarm", "Change Snooze Period", "Quit", "Main Menu"},
-            ["AddAlarmMainTasks"] = new List<string>{ "Change Time", "Change Repeat", "Change Sound", "Create Alarm", "Cancel", "Add Alarm Menu"}, //Edit Alarm Will USE THIS
+            ["Add/EditAlarmMainTasks"] = new List<string>{ "Change Time", "Change Repeat", "Change Sound", "Create Alarm", "Cancel", "Add/Edit Alarm Menu"},
             ["SelectAlarmTasks"] = new List<string>{}, //Manually Refreshed.
             ["SnoozeAlarmTasks"] = new List<string> {"Yes", "No", "Snooze Alarm Menu"},
-            []
 
         };
 
@@ -50,7 +49,31 @@ namespace Alarm501_Console
 
         public static DateTime GetTimeInput() //Not Finished
         {
-            return DateTime.Now;
+            Console.WriteLine("Please write the time you want to change to: (hh:mm:ss)\n");
+            try
+            {
+                List<string> TimeTemp = Console.ReadLine()!.Split(":").ToList();
+
+                bool has3Parts = TimeTemp.Count == 3;
+                bool eachPartsLengthIs2 = TimeTemp.All(PartOfATime => PartOfATime.Length == 2);
+                bool hourIsWithin1and12 = Convert.ToInt32(TimeTemp[0]) > 0 && Convert.ToInt32(TimeTemp[0]) < 13;
+                bool MMandSSIsWithin0and59 = TimeTemp.All(PartOfATime => PartOfATime == TimeTemp[0] || (Convert.ToInt32(PartOfATime) >= 0 && Convert.ToInt32(PartOfATime) < 59));
+
+                if(!(has3Parts && eachPartsLengthIs2 && hourIsWithin1and12 && MMandSSIsWithin0and59)) throw new Exception();
+
+                return DateTime.Parse(TimeTemp.ToString()!);
+            }
+            catch (Exception e) { Console.WriteLine("Invalid Syntax\n"); return GetTimeInput(); }
+        }
+
+        public static int ChangeSnoozePeriod()
+        {
+            try
+            {
+                Console.WriteLine("Change the current snooze alarm in minutes: ");
+                return Convert.ToInt32(Console.ReadLine());
+            }
+            catch (Exception e) { Console.WriteLine("Please enter a valid snooze period in minutes\n"); return ChangeSnoozePeriod(); }
         }
     
 
