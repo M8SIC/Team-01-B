@@ -65,13 +65,15 @@ namespace Alarm501_Console
 
         public void ShowChangeSnoozePeriodView()
         {
-            snoozeTime = IO.ChangeSnoozePeriod();         
+            snoozeTime = IO.ChangeSnoozePeriod();   
+            
+            //This is more than likely where you would call a delegate
 
         }
 
         public void ShowAddAlarmView()
         {
-            IO.GetTaskInput("Add/EditAlarmMainTask");
+            IO.GetTaskInput("Add/EditAlarmMainTasks");
         }
 
         public Alarm ShowSelectAlarmView()
