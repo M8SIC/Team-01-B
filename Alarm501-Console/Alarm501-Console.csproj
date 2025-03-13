@@ -12,8 +12,4 @@
     <ProjectReference Include="..\Alarm501-MC\Alarm501_MC.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Options\" />
-  </ItemGroup>
-
 </Project>

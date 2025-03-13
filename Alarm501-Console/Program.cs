@@ -8,6 +8,7 @@ namespace Alarm501_Console
         public static void Main(string[] args)
         {
             ConsoleAlarmApp app = new ConsoleAlarmApp();
+        
             app.Start();
 
         }

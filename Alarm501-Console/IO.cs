@@ -1,20 +1,23 @@
-﻿using System;
+﻿using Alarm501_Console.Options;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Alarm501_Console
 {
     public static class IO
     {
-        public static Dictionary<string, List<string>> TaskOptions = new Dictionary<string, List<string>>() //Last element in dictionary is the location.
+        public static Dictionary<TaskOption, List<string>> TaskOptions = new Dictionary<TaskOption, List<string>>() //Last element in dictionary is the location.
         {
-            ["MainMenuTasks"] =  new List<string>{ "Add Alarm", "Edit Alarm", "Select A Alarm", "Change Snooze Period", "Quit", "Main Menu"},
-            ["Add/EditAlarmMainTasks"] = new List<string>{ "Change Time", "Change Repeat", "Change Sound", "Create Alarm", "Cancel", "Add/Edit Alarm Menu"},
-            ["SelectAlarmTasks"] = new List<string>{}, //Manually Refreshed.
-            ["SnoozeAlarmTasks"] = new List<string> {"Yes", "No", "Snooze Alarm Menu"},
 
+            [TaskOption.MainMenuTasks] = new List<string>{ "Add Alarm", "Edit Alarm", "Delete A Alarm", "Quit", "Main Menu"},
+            [TaskOption.Add_EditAlarmMainTasks] = new List<string>{ "Update Alarm Name", "Update Alarm Active State", "Update Alarm Time", "Update Alarm Sound", "Update Alarm Repeat Option", "Publish Alarm", "Cancel", "Add/Edit Alarm Menu", },
+            [TaskOption.SelectAlarmTasks] = new List<string>{}, //Manually Refreshed.
+            [TaskOption.SnoozeAlarmTasks] = new List<string> {"Yes", "No", "Snooze Alarm Menu"},
+            [TaskOption.AlarmSoundChoices] = new List<string> {}, //ON INIT
+            [TaskOption.SetAlarmActiveState] = new List<string> {"On", "Off", "Alarm Status Update Menu" },
         };
 
         public static void DisplayCurrentAlarms()
@@ -30,7 +33,7 @@ namespace Alarm501_Console
             Console.WriteLine("\n");
         }
 
-        public static string GetTaskInput(string taskName)
+        public static string GetTaskInput(TaskOption taskName)
         {
             List<string> possibleTasks = TaskOptions[taskName];
 
@@ -60,11 +63,11 @@ namespace Alarm501_Console
                 bool has3Parts = TimeTemp.Count == 3;
                 bool eachPartsLengthIs2 = TimeTemp.All(PartOfATime => PartOfATime.Length == 2);
                 bool hourIsWithin1and12 = Convert.ToInt32(TimeTemp[0]) > 0 && Convert.ToInt32(TimeTemp[0]) < 13;
-                bool MMandSSIsWithin0and59 = TimeTemp.All(PartOfATime => PartOfATime == TimeTemp[0] || (Convert.ToInt32(PartOfATime) >= 0 && Convert.ToInt32(PartOfATime) < 59));
+                bool MMandSSIsWithin0and59 = TimeTemp.All(PartOfATime => PartOfATime == TimeTemp[0] || (Convert.ToInt32(PartOfATime) >= 0 && Convert.ToInt32(PartOfATime) < 60));
 
                 if(!(has3Parts && eachPartsLengthIs2 && hourIsWithin1and12 && MMandSSIsWithin0and59)) throw new Exception();
 
-                return DateTime.Parse(TimeTemp.ToString()!);
+                return DateTime.ParseExact(string.Join(":", TimeTemp), "hh:mm:ss tt", CultureInfo.InvariantCulture);
             }
             catch (Exception e) { Console.WriteLine("Invalid Syntax\n"); return GetTimeInput(); }
         }
@@ -97,7 +100,15 @@ namespace Alarm501_Console
             }
             catch (Exception e) { Console.WriteLine("Invalid Input\n"); return GetRepeatOptionInput(); }
         }
-    
+
+        public static AlarmSound GetAlarmSound() => Enum.Parse<AlarmSound>(GetTaskInput(TaskOption.AlarmSoundChoices));
+        public static string GetAlarmName()
+        {
+            Console.WriteLine("Name the Alarm: ");
+            return Console.ReadLine();
+        }
+
+
 
     }
 }
