@@ -16,10 +16,12 @@ namespace Alarm501_Console
         public ConsoleAlarmApp() { }
         public void Start()
         {
-            while (true)
+            string TaskInput;
+            do
             {
-             // IO.DisplayCurrentAlarms();
-                switch (IO.GetTaskInput("MainMenuTasks"))
+                // IO.DisplayCurrentAlarms();
+                TaskInput = IO.GetTaskInput("MainMenuTasks");
+                switch (TaskInput)
                 {
                     case "Add Alarm": //Future ADD Check To See If ENABLED
                         ShowAddAlarmView();
@@ -30,12 +32,10 @@ namespace Alarm501_Console
                     case "Change Snooze Period":
                         ShowChangeSnoozePeriodView();
                         break;
-                    case "Quit":
-                        Environment.Exit(0);
-                        break;
+
                 }
                 Console.WriteLine("Action DONE\n");
-            }
+            } while (TaskInput != "Quit");
         }
 
         public void ShowEditView()
