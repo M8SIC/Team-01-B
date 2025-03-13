@@ -41,7 +41,7 @@ namespace Alarm501_Console
         public void ShowEditView()
         {
             Alarm? alarm = ShowSelectAlarmView();
-            if (alarm == null) return;
+            if (alarm == null) return; //This will never run hence, the options will be disabled, later implementation.
 
             while(true)
             {
