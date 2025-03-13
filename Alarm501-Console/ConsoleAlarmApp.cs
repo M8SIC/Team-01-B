@@ -42,21 +42,24 @@ namespace Alarm501_Console
         {
             Alarm alarm = ShowSelectAlarmView();
 
-            switch (IO.GetTaskInput("Add/EditAlarmMainTasks"))
+            if(alarm != null )
             {
-                case "Change Time":
-                    alarm.AlarmDateTime = IO.GetTimeInput();
-                    break;
-                case "Change Repeat":
-                    alarm.RepeatOption = IO.GetRepeatOptionInput();
-                    break;
-                case "Change Sound":
-                    break;
-                case "Create Alarm":
-                    break;
-                case "Cancel":
-                    break;
+                switch (IO.GetTaskInput("Add/EditAlarmMainTasks"))
+                {
+                    case "Change Time":
+                        alarm.AlarmDateTime = IO.GetTimeInput();
+                        break;
+                    case "Change Repeat":
+                        alarm.RepeatOption = IO.GetRepeatOptionInput();
+                        break;
+                    case "Change Sound":
+                        break;
+                    case "Create Alarm":
+                        break;
+                    case "Cancel":
+                        break;
 
+                }
             }
         }
 
@@ -68,19 +71,32 @@ namespace Alarm501_Console
 
         public void ShowAddAlarmView()
         {
-            IO.GetTaskInput("AddAlarmMainTasks");
+            IO.GetTaskInput("Add/EditAlarmMainTask");
         }
 
         public Alarm ShowSelectAlarmView()
         {
 
             List<string> alarms = new();
-            foreach (Alarm alarm in Alarm._listOfAlarms!) alarms.Add(alarm.AlarmTimeFormat);
-            alarms.Add("Select Alarm Menu");
 
-            IO.TaskOptions["SelectAlarmTasks"] = alarms;
+            if(Alarm._listOfAlarms == null)
+            {
+                Console.WriteLine("Currently no alarms");
+                return null;
 
-            return Alarm._listOfAlarms[Convert.ToInt32(IO.GetTaskInput("SelectAlarmTasks"))-1];
+
+            }
+            else
+            {
+                foreach (Alarm alarm in Alarm._listOfAlarms!) alarms.Add(alarm.AlarmTimeFormat);
+                alarms.Add("Select Alarm Menu");
+
+                IO.TaskOptions["SelectAlarmTasks"] = alarms;
+
+                return Alarm._listOfAlarms[Convert.ToInt32(IO.GetTaskInput("SelectAlarmTasks")) - 1];
+            }
+
+
         }
 
     }
