@@ -21,10 +21,10 @@ namespace Alarm501_Console
              // IO.DisplayCurrentAlarms();
                 switch (IO.GetTaskInput("MainMenuTasks"))
                 {
-                    case "Add Alarm":
+                    case "Add Alarm": //Future ADD Check To See If ENABLED
                         ShowAddAlarmView();
                         break;
-                    case "Edit Alarm":
+                    case "Edit Alarm": //Future ADD Check To See If ENABLED
                         ShowEditView();
                         break;
                     case "Change Snooze Period":
@@ -40,9 +40,10 @@ namespace Alarm501_Console
 
         public void ShowEditView()
         {
-            Alarm alarm = ShowSelectAlarmView();
+            Alarm? alarm = ShowSelectAlarmView();
+            if (alarm == null) return;
 
-            if(alarm != null )
+            while(true)
             {
                 switch (IO.GetTaskInput("Add/EditAlarmMainTasks"))
                 {
@@ -55,12 +56,14 @@ namespace Alarm501_Console
                     case "Change Sound":
                         break;
                     case "Create Alarm":
-                        break;
-                    case "Cancel":
-                        break;
+                        //Add and Create Alarm
 
+                        return;
+                    case "Cancel":
+                        return;
                 }
             }
+         
         }
 
         public void ShowChangeSnoozePeriodView()
@@ -76,29 +79,17 @@ namespace Alarm501_Console
             IO.GetTaskInput("Add/EditAlarmMainTasks");
         }
 
-        public Alarm ShowSelectAlarmView()
+        public Alarm? ShowSelectAlarmView() //This is closed till delegates are setup
         {
+            if (Alarm._listOfAlarms!.Count == 0) return null;
 
             List<string> alarms = new();
+            foreach (Alarm alarm in Alarm._listOfAlarms!) alarms.Add(alarm.AlarmTimeFormat);
+            alarms.Add("Select Alarm Menu");
 
-            if(Alarm._listOfAlarms == null)
-            {
-                Console.WriteLine("Currently no alarms");
-                return null;
+            IO.TaskOptions["SelectAlarmTasks"] = alarms;
 
-
-            }
-            else
-            {
-                foreach (Alarm alarm in Alarm._listOfAlarms!) alarms.Add(alarm.AlarmTimeFormat);
-                alarms.Add("Select Alarm Menu");
-
-                IO.TaskOptions["SelectAlarmTasks"] = alarms;
-
-                return Alarm._listOfAlarms[Convert.ToInt32(IO.GetTaskInput("SelectAlarmTasks")) - 1];
-            }
-
-
+            return Alarm._listOfAlarms[Convert.ToInt32(IO.GetTaskInput("SelectAlarmTasks")) - 1];
         }
 
     }
