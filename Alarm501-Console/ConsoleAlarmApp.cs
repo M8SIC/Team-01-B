@@ -48,6 +48,7 @@ namespace Alarm501_Console
                     alarm.AlarmDateTime = IO.GetTimeInput();
                     break;
                 case "Change Repeat":
+                    alarm.RepeatOption = IO.GetRepeatOptionInput();
                     break;
                 case "Change Sound":
                     break;

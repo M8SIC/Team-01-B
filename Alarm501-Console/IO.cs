@@ -75,6 +75,16 @@ namespace Alarm501_Console
             }
             catch (Exception e) { Console.WriteLine("Please enter a valid snooze period in minutes\n"); return ChangeSnoozePeriod(); }
         }
+        public static string GetRepeatOptionInput()
+        {
+            Console.WriteLine("Choose the avaliable repeating options: \n None  (1) \n Daily (2) \n Weekly (3)");
+            try
+            {
+                int OptionChosen = Convert.ToInt32(Console.ReadLine());
+                return (OptionChosen==1) ? "None" : (OptionChosen == 2) ? "Daily" : (OptionChosen == 3) ? "Weekly" : throw new Exception();
+            }
+            catch (Exception e) { Console.WriteLine("Invalid Input\n"); return GetRepeatOptionInput(); }
+        }
     
 
     }
