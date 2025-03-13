@@ -11,18 +11,29 @@ namespace Alarm501_Console
         public ConsoleAlarmApp() { }
         public void Start()
         {
-            switch (IO.GetTaskInput())
+            while (true)
             {
-                case "Add Alarm":
-                    ShowAddAlarmView();
-                    break;
-                case "Quit":
-                    Environment.Exit(0);
-                    break;
+             // IO.DisplayCurrentAlarms();
+                switch (IO.GetTaskInput("MainMenuTasks"))
+                {
+                    case "Add Alarm":
+                        ShowAddAlarmView();
+                        break;
+                    case "Edit Alarm":
+                        ShowEditView();
+                        break;
+                    case "Select A Alarm":
+                      //  ShowSelectAlarmView();
+                        break;
+                    case "Change Snooze Period":
+                        ShowChangeSnoozePeriodView();
+                        break;
+                    case "Quit":
+                        Environment.Exit(0);
+                        break;
+                }
+                Console.WriteLine("Action DONE\n");
             }
-            Console.WriteLine("Action DONE\n");
-
-            Start();
         }
 
         public void ShowEditView()
@@ -30,9 +41,24 @@ namespace Alarm501_Console
 
         }
 
-        public void ShowAddAlarmView()
+        public void ShowChangeSnoozePeriodView()
         {
 
+        }
+
+        public void ShowAddAlarmView()
+        {
+            IO.GetTaskInput("AddAlarmMainTasks");
+        }
+
+        public void ShowSelectAlarmView()
+        {
+
+            List<string> alarms = new();
+            foreach (Alarm alarm in Alarm._listOfAlarms!) alarms.Add(alarm.AlarmTimeFormat);
+            alarms.Add("Select Alarm Menu");
+
+            IO.GetTaskInput("SelectAlarmTasks");
         }
 
     }

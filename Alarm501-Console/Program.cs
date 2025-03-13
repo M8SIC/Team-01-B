@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Alarm501_MC;
+using System.ComponentModel;
 
 namespace Alarm501_Console
 {
@@ -8,6 +9,7 @@ namespace Alarm501_Console
         {
             ConsoleAlarmApp app = new ConsoleAlarmApp();
             app.Start();
+
         }
     }
 }
