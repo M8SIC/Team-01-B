@@ -68,7 +68,7 @@ namespace Alarm501_Console
 
         public void ShowAddAlarmView()
         {
-            IO.GetTaskInput("AddAlarmMainTasks");
+            IO.GetTaskInput("Add/EditAlarmMainTasks");
         }
 
         public Alarm ShowSelectAlarmView()

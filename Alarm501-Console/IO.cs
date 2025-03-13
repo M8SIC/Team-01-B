@@ -19,6 +19,7 @@ namespace Alarm501_Console
 
         public static void DisplayCurrentAlarms()
         {
+            Console.Clear();
             Console.WriteLine("Here Are Your Current Alarms:\n");
             
             foreach(Alarm alarm in Alarm._listOfAlarms!)
@@ -35,6 +36,7 @@ namespace Alarm501_Console
 
             try
             {
+                Console.Clear();
                 Console.WriteLine($"You Are At {possibleTasks[possibleTasks.Count-1]}, Here Are Your Current Options: (1-{possibleTasks.Count - 1})");
                 for (int i = 0; i < possibleTasks.Count - 1; i++) Console.WriteLine($"({i + 1}) {possibleTasks[i]}");
 
@@ -49,6 +51,7 @@ namespace Alarm501_Console
 
         public static DateTime GetTimeInput() //Not Finished
         {
+            Console.Clear();
             Console.WriteLine("Please write the time you want to change to: (hh:mm:ss)\n");
             try
             {
@@ -70,13 +73,16 @@ namespace Alarm501_Console
         {
             try
             {
+                Console.Clear();
                 Console.WriteLine("Change the current snooze alarm in minutes: ");
                 return Convert.ToInt32(Console.ReadLine());
             }
             catch (Exception e) { Console.WriteLine("Please enter a valid snooze period in minutes\n"); return ChangeSnoozePeriod(); }
         }
+
         public static string GetRepeatOptionInput()
         {
+            Console.Clear();
             Console.WriteLine("Choose the avaliable repeating options: \n None  (1) \n Daily (2) \n Weekly (3)");
             try
             {
