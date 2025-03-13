@@ -55,9 +55,9 @@ namespace Alarm501_Console
         public static DateTime GetTimeInput() //Not Finished
         {
             //Console.Clear();
-            Console.WriteLine("Please write the time you want to change to: (hh:mm:ss)\n");
             try
             {
+                Console.WriteLine("Please write the time you want to change to: (hh:mm:ss)");
                 List<string> TimeTemp = Console.ReadLine()!.Split(":").ToList();
 
                 bool has3Parts = TimeTemp.Count == 3;
@@ -67,7 +67,19 @@ namespace Alarm501_Console
 
                 if(!(has3Parts && eachPartsLengthIs2 && hourIsWithin1and12 && MMandSSIsWithin0and59)) throw new Exception();
 
-                return DateTime.ParseExact(string.Join(":", TimeTemp), "hh:mm:ss tt", CultureInfo.InvariantCulture);
+                string AM_PM = "";
+                while(AM_PM == "")
+                {
+                    Console.WriteLine("Please pick AM or PM: (A)M/(P)M");
+                    string response = Console.ReadLine()!.ToLower();
+                    try
+                    {
+                        AM_PM = (response == "a") ? "AM" : (response == "b") ? "PM" : throw new Exception();
+                    }
+                    catch (Exception e) { Console.WriteLine("Invalid Syntax"); }
+                }
+
+                return DateTime.ParseExact($"{string.Join(":", TimeTemp)} {AM_PM}", "hh:mm:ss tt", CultureInfo.InvariantCulture);
             }
             catch (Exception e) { Console.WriteLine("Invalid Syntax\n"); return GetTimeInput(); }
         }
@@ -105,7 +117,7 @@ namespace Alarm501_Console
         public static string GetAlarmName()
         {
             Console.WriteLine("Name the Alarm: ");
-            return Console.ReadLine();
+            return Console.ReadLine()!;
         }
 
 
