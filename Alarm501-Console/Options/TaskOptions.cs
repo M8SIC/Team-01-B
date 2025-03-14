@@ -13,6 +13,7 @@ namespace Alarm501_Console.Options
         SelectAlarmTasks,
         SnoozeAlarmTasks,
         AlarmSoundChoices,
-        SetAlarmActiveState
+        SetAlarmActiveState,
+        DeleteAnotherAlarmQuestion
     }
 }
