@@ -88,7 +88,6 @@ namespace Alarm501_MC
             get
             {
                 string isOnText = (IsON) ? "On" : "Off";
-
                 return $"{AlarmName}   " + AlarmDateTime.ToString($"hh:mm tt ") + isOnText;
             }
         }

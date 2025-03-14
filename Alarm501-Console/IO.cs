@@ -51,7 +51,6 @@ namespace Alarm501_Console
             catch (Exception e) { Console.WriteLine("Invalid Option\n"); return GetTaskInput(taskName); }
         }
 
-
         public static DateTime GetTimeInput() //Not Finished
         {
             //Console.Clear();
