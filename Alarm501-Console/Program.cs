@@ -15,7 +15,7 @@ namespace Alarm501_Console
 
 
             ConsoleAlarmApp app = new ConsoleAlarmApp();
-            AlarmCore alarmCore = new AlarmCore(IO.DisplayCurrentAlarms, app.SetAddOptionEnabledTo, app.getCurrentSelectedIndex, app.ShowAlarmRingView);
+            AlarmCore alarmCore = new AlarmCore(IO.DisplayCurrentAlarms, app.SetAddOptionEnabledTo, app.getCurrentSelectedIndex, app.NotifyAlarmRingView);
             app.Init(alarmCore.SnoozeAlarm, alarmCore.GetAlarmsByState, alarmCore.AddAlarm, alarmCore.UpdateAlarm, alarmCore.CheckRepeatOption, alarmCore.ToggleActiveState, alarmCore.DeleteAlarm);
             alarmCore.Init();
 

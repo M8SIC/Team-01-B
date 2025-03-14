@@ -34,11 +34,10 @@ namespace Alarm501_Console
 
         public static string GetTaskInput(TaskOption taskName)
         {
-            List<string> possibleTasks = TaskOptions[taskName];
+            List<string> possibleTasks = TaskOptions[taskName].ToList();
 
             try
             {
-                //Console.Clear();
                 Console.WriteLine($"You Are At {possibleTasks[possibleTasks.Count-1]}, Here Are Your Current Options: (1-{possibleTasks.Count - 1})");
                 for (int i = 0; i < possibleTasks.Count - 1; i++) Console.WriteLine($"({i + 1}) {possibleTasks[i]}");
 
