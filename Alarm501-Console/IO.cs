@@ -18,6 +18,7 @@ namespace Alarm501_Console
             [TaskOption.SnoozeAlarmTasks] = new List<string> {"Yes", "No", "Snooze Alarm Menu"},
             [TaskOption.AlarmSoundChoices] = new List<string> {}, //ON INIT
             [TaskOption.SetAlarmActiveState] = new List<string> {"On", "Off", "Alarm Status Update Menu" },
+            [TaskOption.DeleteAnotherAlarmQuestion] = new List<string>{"Yes", "No", "Delete Alarm Menu"},
         };
 
         public static void DisplayCurrentAlarms()
@@ -119,6 +120,16 @@ namespace Alarm501_Console
             return Console.ReadLine()!;
         }
 
+        public static string GetDeleteAnotherAlarmResponse()
+        {
+            Console.WriteLine("Do you want to delete another alarm?");
+            return IO.GetTaskInput(TaskOption.DeleteAnotherAlarmQuestion);
+        }
+
+        /*public static List<int> DeleteAlarm()
+        {
+
+        }*/
 
 
     }

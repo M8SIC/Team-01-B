@@ -12,8 +12,10 @@ namespace Alarm501_Console
     public class ConsoleAlarmApp
     {
         #region Fields/Property/Events
-        private SendAlarmFuncWithSnoozeTime SnoozeAlarm;
+        private bool AddIsEnabled = true; //Haven't IMPLEMENTED MAKE SURE TO DO IT
+        private int lastSelectedIndex = -1;
 
+        private SendAlarmFuncWithSnoozeTime SnoozeAlarm;
         private GetAlarmList GetAlarmsByState;
 
         private SendAlarmFunc AddAlarm;
@@ -25,20 +27,23 @@ namespace Alarm501_Console
         #endregion
 
         public ConsoleAlarmApp() {}
-        public void Init(SendAlarmFuncWithSnoozeTime SnoozeAlarm, GetAlarmList GetAlarmsByState, SendAlarmFunc AddAlarm, SendAlarmFunc UpdateAlarm, SendAlarmFunc CheckRepeatOption, PassListOfIntFunc DeleteAlarm)
+        public void Init(SendAlarmFuncWithSnoozeTime SnoozeAlarm, GetAlarmList GetAlarmsByState, SendAlarmFunc AddAlarm, SendAlarmFunc UpdateAlarm, SendAlarmFunc CheckRepeatOption, ParameterlessFunc ToggleActiveState, PassListOfIntFunc DeleteAlarm)
         {
             this.SnoozeAlarm = SnoozeAlarm;
             this.GetAlarmsByState = GetAlarmsByState;
             this.AddAlarm = AddAlarm;
             this.UpdateAlarm = UpdateAlarm;
             this.CheckRepeatOption = CheckRepeatOption;
+            this.toggleActiveState = ToggleActiveState;
             this.DeleteAlarm = DeleteAlarm;
 
-            List<string> choices = new List<string>();
-            choices.AddRange(Enum.GetValues(typeof(AlarmSound)).Cast<string>());
+            List<string> choices = Enum.GetValues(typeof(AlarmSound)).Cast<AlarmSound>().Select(sound => sound.ToString()).ToList();
+
             choices.Add("Change Alarm Sound Menu");
             IO.TaskOptions[TaskOption.AlarmSoundChoices] = choices.ToList();
         }
+
+        public int getCurrentSelectedIndex() => lastSelectedIndex;
 
 
         public void Start()
@@ -56,7 +61,7 @@ namespace Alarm501_Console
                         ShowEditView();
                         break;
                     case "Delete A Alarm":
-
+                        ShowDeleteView();
                         break;
 
                 }
@@ -64,17 +69,34 @@ namespace Alarm501_Console
             }
         }
 
+        public void SetAddOptionEnabledTo(bool enabled)
+        {
+            AddIsEnabled = enabled;
+        }
+
         public void ShowDeleteView()
         {
+            do
+            {
+                int AlarmIndexSelected = ShowSelectAlarmView();
+                if (AlarmIndexSelected == -1) return; //Future add reason why
 
+                DeleteAlarm(new List<int>() { AlarmIndexSelected });
+            } while (IO.GetDeleteAnotherAlarmResponse() == "Yes");
         }
 
         public void ShowEditView()
         {
-            Alarm? alarm = ShowSelectAlarmView();
-            if (alarm == null) return; //This will never run hence, the options will be disabled, later implementation.
 
-            while(true)
+            int AlarmIndexSelected = ShowSelectAlarmView();
+            if (AlarmIndexSelected == -1) return; //Future add reason why
+
+            Alarm? alarm = Alarm._listOfAlarms![AlarmIndexSelected];
+
+            if(alarm.IsON && GetAlarmsByState() != Alarm._listOfActiveAlarms) toggleActiveState();
+            if(!alarm.IsON && GetAlarmsByState() != Alarm._listOfInactiveAlarms) toggleActiveState(); //UMMM pls ignore cuz this fixes the extra credit issue.
+
+            while (true)
             {
                 switch (IO.GetTaskInput(TaskOption.Add_EditAlarmMainTasks))
                 {
@@ -160,9 +182,9 @@ namespace Alarm501_Console
             }
         }
 
-        public Alarm? ShowSelectAlarmView() //This is closed till delegates are setup
+        public int ShowSelectAlarmView() //This is closed till delegates are setup
         {
-            if (Alarm._listOfAlarms!.Count == 0) return null;
+            if (Alarm._listOfAlarms!.Count == 0) return -1;
 
             List<string> alarms = new();
             foreach (Alarm alarm in Alarm._listOfAlarms!) alarms.Add(alarm.AlarmTimeFormat);
@@ -170,7 +192,7 @@ namespace Alarm501_Console
 
             IO.TaskOptions[TaskOption.SelectAlarmTasks] = alarms;
 
-            return Alarm._listOfAlarms[Convert.ToInt32(IO.GetTaskInput(TaskOption.SelectAlarmTasks)) - 1];
+            return lastSelectedIndex = Convert.ToInt32(IO.TaskOptions[TaskOption.SelectAlarmTasks].IndexOf(IO.GetTaskInput(TaskOption.SelectAlarmTasks)));
         }
 
     }

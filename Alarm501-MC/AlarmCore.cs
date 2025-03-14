@@ -56,6 +56,7 @@ namespace Alarm501_MC
             }
             else
             {
+                int b = getCurrentSelectedIndex();
                 alarmListToAddTo![getCurrentSelectedIndex()] = alarm;
             }
            
