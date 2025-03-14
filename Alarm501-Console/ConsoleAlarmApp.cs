@@ -12,7 +12,6 @@ namespace Alarm501_Console
     public class ConsoleAlarmApp
     {
         #region Fields/Property/Events
-        private bool AddIsEnabled = true; //Haven't IMPLEMENTED MAKE SURE TO DO IT
         private int lastSelectedIndex = -1;
 
         private SendAlarmFuncWithSnoozeTime SnoozeAlarm;
@@ -36,22 +35,16 @@ namespace Alarm501_Console
             this.CheckRepeatOption = CheckRepeatOption;
             this.toggleActiveState = ToggleActiveState;
             this.DeleteAlarm = DeleteAlarm;
-
-            List<string> choices = Enum.GetValues(typeof(AlarmSound)).Cast<AlarmSound>().Select(sound => sound.ToString()).ToList();
-
-            choices.Add("Change Alarm Sound Menu");
-            IO.TaskOptions[TaskOption.AlarmSoundChoices] = choices.ToList();
         }
 
         public int getCurrentSelectedIndex() => lastSelectedIndex;
-
 
         public void Start()
         {
             string TaskInput;
             while ((TaskInput = IO.GetTaskInput(TaskOption.MainMenuTasks)) != "Quit")
             {
-                // IO.DisplayCurrentAlarms();
+                IO.DisplayCurrentAlarms();
                 switch (TaskInput)
                 {
                     case "Add Alarm": //Future ADD Check To See If ENABLED
@@ -65,31 +58,31 @@ namespace Alarm501_Console
                         break;
 
                 }
-                Console.WriteLine("Action DONE\n");
             }
         }
 
-        public void SetAddOptionEnabledTo(bool enabled)
-        {
-            AddIsEnabled = enabled;
-        }
+        public void SetAddOptionEnabledTo(bool enabled){}
 
         public void ShowDeleteView()
         {
             do
             {
                 int AlarmIndexSelected = ShowSelectAlarmView();
-                if (AlarmIndexSelected == -1) return; //Future add reason why
+                if (AlarmIndexSelected == -1) { IO.Display("You can't delete anything, no alarms exist."); return; }
 
                 DeleteAlarm(new List<int>() { AlarmIndexSelected });
-            } while (IO.GetDeleteAnotherAlarmResponse() == "Yes");
+                lastSelectedIndex = -1;
+                IO.DisplayCurrentAlarms();
+
+            } while (Alarm._listOfAlarms!.Count != 0 && IO.GetYesOrNoInput("Do you want to delete another alarm?"));
+
         }
 
         public void ShowEditView()
         {
 
             int AlarmIndexSelected = ShowSelectAlarmView();
-            if (AlarmIndexSelected == -1) return; //Future add reason why
+            if (AlarmIndexSelected == -1) { IO.Display("You can't edit, no alarms exist."); return; }
 
             Alarm? alarm = Alarm._listOfAlarms![AlarmIndexSelected];
 
@@ -117,8 +110,12 @@ namespace Alarm501_Console
                         break;
                     case "Publish Alarm":
                         UpdateAlarm(alarm);
+                        lastSelectedIndex = -1;
+                        IO.DisplayCurrentAlarms();
+
                         return;
                     case "Cancel":
+                        lastSelectedIndex = -1;
                         return;
                 }
             }
@@ -132,7 +129,7 @@ namespace Alarm501_Console
 
         public void ShowAlarmRingView(Alarm alarm)
         {
-            if(IO.GetTaskInput(TaskOption.SnoozeAlarmTasks) == "Yes") //Prompt user for the snooze period
+            if (IO.GetYesOrNoInput($"{alarm} just went off.\nDo you want to snooze your alarm.")) //Prompt user for the snooze period
             {
                 SnoozeAlarm(alarm, ShowChangeSnoozePeriodView());
             }
@@ -144,6 +141,8 @@ namespace Alarm501_Console
 
         public void ShowAddAlarmView()
         {
+            if(Alarm._listOfAlarms!.Count >= 5) { IO.Display("You can't add more alarms, 5 is the max."); return; }
+
             DateTime dateTime = DateTime.Now;
             bool isOn = false;
             AlarmSound alarmSound = AlarmSound.Radar;
@@ -173,8 +172,8 @@ namespace Alarm501_Console
 
                     case "Publish Alarm":
                         Alarm? alarm = new Alarm(dateTime, isOn, alarmSound, alarmName, repeatOption);
-
                         AddAlarm(alarm);
+
                         return;
                     case "Cancel":
                         return;
@@ -185,12 +184,7 @@ namespace Alarm501_Console
         public int ShowSelectAlarmView() //This is closed till delegates are setup
         {
             if (Alarm._listOfAlarms!.Count == 0) return -1;
-
-            List<string> alarms = new();
-            foreach (Alarm alarm in Alarm._listOfAlarms!) alarms.Add(alarm.AlarmTimeFormat);
-            alarms.Add("Select Alarm Menu");
-
-            IO.TaskOptions[TaskOption.SelectAlarmTasks] = alarms;
+            IO.TaskOptions[TaskOption.SelectAlarmTasks] = Alarm._listOfAlarms.Select(alarm => alarm.AlarmTimeFormat).Concat(new[] { "Select Alarm Menu" }).ToList();
 
             return lastSelectedIndex = Convert.ToInt32(IO.TaskOptions[TaskOption.SelectAlarmTasks].IndexOf(IO.GetTaskInput(TaskOption.SelectAlarmTasks)));
         }

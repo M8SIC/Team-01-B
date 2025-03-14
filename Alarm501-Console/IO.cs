@@ -1,6 +1,7 @@
 ﻿using Alarm501_Console.Options;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -15,17 +16,14 @@ namespace Alarm501_Console
             [TaskOption.MainMenuTasks] = new List<string>{ "Add Alarm", "Edit Alarm", "Delete A Alarm", "Quit", "Main Menu"},
             [TaskOption.Add_EditAlarmMainTasks] = new List<string>{ "Update Alarm Name", "Update Alarm Active State", "Update Alarm Time", "Update Alarm Sound", "Update Alarm Repeat Option", "Publish Alarm", "Cancel", "Add/Edit Alarm Menu", },
             [TaskOption.SelectAlarmTasks] = new List<string>{}, //Manually Refreshed.
-            [TaskOption.SnoozeAlarmTasks] = new List<string> {"Yes", "No", "Snooze Alarm Menu"},
-            [TaskOption.AlarmSoundChoices] = new List<string> {}, //ON INIT
+            [TaskOption.AlarmSoundChoices] = Enum.GetValues(typeof(AlarmSound)).Cast<AlarmSound>().Select(sound => sound.ToString()).Concat(new[] { "Change Alarm Sound Menu" }).ToList(),
             [TaskOption.SetAlarmActiveState] = new List<string> {"On", "Off", "Alarm Status Update Menu" },
-            [TaskOption.DeleteAnotherAlarmQuestion] = new List<string>{"Yes", "No", "Delete Alarm Menu"},
         };
 
         public static void DisplayCurrentAlarms()
         {
             Console.Clear();
             Console.WriteLine("Here Are Your Current Alarms:\n");
-            
             foreach(Alarm alarm in Alarm._listOfAlarms!)
             {
                 Console.WriteLine(alarm.AlarmTimeFormat);
@@ -52,9 +50,23 @@ namespace Alarm501_Console
             catch (Exception e) { Console.WriteLine("Invalid Option\n"); return GetTaskInput(taskName); }
         }
 
+        public static bool GetYesOrNoInput(string theQuestionToAsk)
+        {
+            try
+            {
+                Console.WriteLine($"{theQuestionToAsk}\n(1) Yes\n(2) No");
+
+                int task = Convert.ToInt32(Console.ReadLine());
+                if (task < 1 || task > 2) throw new Exception();
+
+                return task == 1;
+            }
+            catch (Exception e) { Console.WriteLine("Invalid Option\n"); return GetYesOrNoInput(theQuestionToAsk); }
+        }
+
+        public static void Display(string txt) => Console.WriteLine(txt);
         public static DateTime GetTimeInput()
         {
-            //Console.Clear();
             try
             {
                 Console.WriteLine("Please write the time you want to change to: (hh:mm:ss)");
@@ -88,7 +100,6 @@ namespace Alarm501_Console
         {
             try
             {
-                //Console.Clear();
                 Console.WriteLine("Change the current snooze alarm in minutes (1 - 30): ");
                 int input = Convert.ToInt32(Console.ReadLine());
                 while (input < 1 || input > 30)
@@ -103,7 +114,6 @@ namespace Alarm501_Console
 
         public static string GetRepeatOptionInput()
         {
-            Console.Clear();
             Console.WriteLine("Choose the avaliable repeating options: \n None  (1) \n Daily (2) \n Weekly (3)");
             try
             {
@@ -116,21 +126,9 @@ namespace Alarm501_Console
         public static AlarmSound GetAlarmSound() => Enum.Parse<AlarmSound>(GetTaskInput(TaskOption.AlarmSoundChoices));
         public static string GetAlarmName()
         {
-            Console.WriteLine("Name the Alarm: ");
+            Console.Write("Name the Alarm: ");
             return Console.ReadLine()!;
         }
-
-        public static string GetDeleteAnotherAlarmResponse()
-        {
-            Console.WriteLine("Do you want to delete another alarm?");
-            return IO.GetTaskInput(TaskOption.DeleteAnotherAlarmQuestion);
-        }
-
-        /*public static List<int> DeleteAlarm()
-        {
-
-        }*/
-
 
     }
 }

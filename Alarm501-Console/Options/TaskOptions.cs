@@ -11,9 +11,7 @@ namespace Alarm501_Console.Options
         MainMenuTasks,
         Add_EditAlarmMainTasks,
         SelectAlarmTasks,
-        SnoozeAlarmTasks,
         AlarmSoundChoices,
-        SetAlarmActiveState,
-        DeleteAnotherAlarmQuestion
+        SetAlarmActiveState
     }
 }
