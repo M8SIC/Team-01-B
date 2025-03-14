@@ -6,13 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Alarm501_MC;
+using System.Diagnostics;
 
 namespace Alarm501_Console
 {
     public class ConsoleAlarmApp
     {
         #region Fields/Property/Events
-        private int lastSelectedIndex = -1;
+        private bool alarmRanged = false;
+        private int lastSelectedIndex = -1; //return from universal set of ALARMS, get the indexof inside of inactive.
 
         private SendAlarmFuncWithSnoozeTime SnoozeAlarm;
         private GetAlarmList GetAlarmsByState;
@@ -37,7 +39,9 @@ namespace Alarm501_Console
             this.DeleteAlarm = DeleteAlarm;
         }
 
-        public int getCurrentSelectedIndex() => lastSelectedIndex;
+        public int getCurrentSelectedIndex() => (Alarm._listOfActiveAlarms.IndexOf(Alarm._listOfAlarms![lastSelectedIndex]) != -1) ? 
+            Alarm._listOfActiveAlarms.IndexOf(Alarm._listOfAlarms![lastSelectedIndex]) : 
+            Alarm._listOfInactiveAlarms.IndexOf(Alarm._listOfAlarms![lastSelectedIndex]);
 
         public void Start()
         {
@@ -71,7 +75,6 @@ namespace Alarm501_Console
                 if (AlarmIndexSelected == -1) { IO.Display("You can't delete anything, no alarms exist."); return; }
 
                 DeleteAlarm(new List<int>() { AlarmIndexSelected });
-                lastSelectedIndex = -1;
                 IO.DisplayCurrentAlarms();
 
             } while (Alarm._listOfAlarms!.Count != 0 && IO.GetYesOrNoInput("Do you want to delete another alarm?"));
@@ -110,12 +113,10 @@ namespace Alarm501_Console
                         break;
                     case "Publish Alarm":
                         UpdateAlarm(alarm);
-                        lastSelectedIndex = -1;
-                        IO.DisplayCurrentAlarms();
 
+                        IO.DisplayCurrentAlarms();
                         return;
                     case "Cancel":
-                        lastSelectedIndex = -1;
                         return;
                 }
             }
@@ -129,6 +130,8 @@ namespace Alarm501_Console
 
         public void ShowAlarmRingView(Alarm alarm)
         {
+            //Implement the NEW CONSOLE HERE
+
             if (IO.GetYesOrNoInput($"{alarm} just went off.\nDo you want to snooze your alarm.")) //Prompt user for the snooze period
             {
                 SnoozeAlarm(alarm, ShowChangeSnoozePeriodView());
@@ -186,7 +189,7 @@ namespace Alarm501_Console
             if (Alarm._listOfAlarms!.Count == 0) return -1;
             IO.TaskOptions[TaskOption.SelectAlarmTasks] = Alarm._listOfAlarms.Select(alarm => alarm.AlarmTimeFormat).Concat(new[] { "Select Alarm Menu" }).ToList();
 
-            return lastSelectedIndex = Convert.ToInt32(IO.TaskOptions[TaskOption.SelectAlarmTasks].IndexOf(IO.GetTaskInput(TaskOption.SelectAlarmTasks)));
+            return lastSelectedIndex = IO.TaskOptions[TaskOption.SelectAlarmTasks].IndexOf(IO.GetTaskInput(TaskOption.SelectAlarmTasks));
         }
 
     }

@@ -44,6 +44,8 @@ namespace Alarm501_MC
         {
             BindingList<Alarm>? alarmListToAddTo = (alarm.IsON) ? Alarm._listOfActiveAlarms : Alarm._listOfInactiveAlarms;
 
+            int b = getCurrentSelectedIndex();
+
             if (_activeState && alarmListToAddTo != Alarm._listOfActiveAlarms)
             {
                 Alarm._listOfActiveAlarms.RemoveAt(getCurrentSelectedIndex());
@@ -51,12 +53,11 @@ namespace Alarm501_MC
             }
             else if(!_activeState && alarmListToAddTo == Alarm._listOfActiveAlarms)
             {
-                Alarm._listOfInactiveAlarms.RemoveAt(getCurrentSelectedIndex());
+                Alarm._listOfInactiveAlarms.RemoveAt(getCurrentSelectedIndex()); //return from universal set of ALARMS, get the indexof inside of inactive.
                 Alarm._listOfActiveAlarms.Add(alarm);
             }
             else
             {
-                int b = getCurrentSelectedIndex();
                 alarmListToAddTo![getCurrentSelectedIndex()] = alarm;
             }
            
