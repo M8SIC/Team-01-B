@@ -85,7 +85,7 @@ namespace Alarm501_Console
                     string response = Console.ReadLine()!.ToLower();
                     try
                     {
-                        AM_PM = (response == "a") ? "AM" : (response == "b") ? "PM" : throw new Exception();
+                        AM_PM = (response == "a") ? "AM" : (response == "p") ? "PM" : throw new Exception();
                     }
                     catch (Exception e) { Console.WriteLine("Invalid Syntax"); }
                 }
