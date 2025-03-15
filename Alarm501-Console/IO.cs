@@ -68,9 +68,10 @@ namespace Alarm501_Console
         {
             try
             {
-                Console.WriteLine("Please write the time you want to change to: (hh:mm:ss)");
+                Console.WriteLine("Please write the time you want to change to: (hh:mm:ss) or (C)ancel");
                 List<string> TimeTemp = Console.ReadLine()!.Split(":").ToList();
-
+                if (TimeTemp[0].ToLower() == "c") return new DateTime(1);
+                
                 bool has3Parts = TimeTemp.Count == 3;
                 bool eachPartsLengthIs2 = TimeTemp.All(PartOfATime => PartOfATime.Length == 2);
                 bool hourIsWithin1and12 = Convert.ToInt32(TimeTemp[0]) > 0 && Convert.ToInt32(TimeTemp[0]) < 13;
@@ -81,11 +82,13 @@ namespace Alarm501_Console
                 string AM_PM = "";
                 while(AM_PM == "")
                 {
-                    Console.WriteLine("Please pick AM or PM: (A)M/(P)M");
+                    Console.WriteLine("Please pick AM or PM: (A)M/(P)M or (C)ancel");
                     string response = Console.ReadLine()!.ToLower();
+                    if (response == "c") return new DateTime(1);
+
                     try
                     {
-                        AM_PM = (response == "a") ? "AM" : (response == "p") ? "PM" : throw new Exception();
+                        AM_PM = (response == "am") ? "AM" : (response == "pm") ? "PM" : (response == "a") ? "AM" : (response == "p") ? "PM" : throw new Exception();
                     }
                     catch (Exception e) { Console.WriteLine("Invalid Syntax"); }
                 }
@@ -95,20 +98,20 @@ namespace Alarm501_Console
             catch (Exception e) { Console.WriteLine("Invalid Syntax\n"); return GetTimeInput(); }
         }
 
-        public static int ChangeSnoozePeriod()
+        public static int SetSnoozePeriod() //Renamed
         {
             try
             {
-                Console.WriteLine("Change the current snooze alarm in minutes (1 - 30): ");
-                int input = Convert.ToInt32(Console.ReadLine());
-                while (input < 1 || input > 30)
+                int input = -1;
+                do
                 {
-                    Console.WriteLine("Change the current snooze alarm in minutes (1 - 30): ");
-                    input = Convert.ToInt32(Console.ReadLine());
-                }
+                    Console.Write((input != -1) ? "Invalid Snooze Range\n" : "");
+                    Console.WriteLine("How long do you want to snooze your alarm in minutes (1 - 30): ");
+                } while (( input = Convert.ToInt32(Console.ReadLine()) ) > 30 || input < 1);
+
                 return input;
             }
-            catch (Exception e) { Console.WriteLine("Please enter a valid snooze period in minutes\n"); return ChangeSnoozePeriod(); }
+            catch (Exception e) { Console.WriteLine("Invalid Syntax, Not A Number\n"); return SetSnoozePeriod(); }
         }
 
         public static string GetRepeatOptionInput()

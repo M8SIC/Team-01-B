@@ -51,7 +51,7 @@ namespace Alarm501_Console
                 IO.DisplayCurrentAlarms();
                 switch (TaskInput)
                 {
-                    case "Take Action On The Alarm That Just Ranged":
+                    case "Take Action On The Alarm That Just Rang":
                         ShowAlarmRingView();
                         break;
                     case "Add Alarm": 
@@ -63,7 +63,6 @@ namespace Alarm501_Console
                     case "Delete A Alarm":
                         ShowDeleteView();
                         break;
-
                 }
             }
         }
@@ -103,7 +102,10 @@ namespace Alarm501_Console
                 switch (IO.GetTaskInput(TaskOption.Add_EditAlarmMainTasks))
                 {
                     case "Update Alarm Time":
-                        alarm.AlarmDateTime = IO.GetTimeInput();
+                        DateTime timeToSet = IO.GetTimeInput();
+                        if (timeToSet.Ticks == 1) break;
+
+                        alarm.AlarmDateTime = timeToSet;
                         break;
                     case "Update Alarm Repeat Option":
                         alarm.RepeatOption = IO.GetRepeatOptionInput();
@@ -130,21 +132,15 @@ namespace Alarm501_Console
             }
          
         }
-
-        public int ShowChangeSnoozePeriodView()
-        {
-            return IO.ChangeSnoozePeriod();
-        }
-
-        public void ShowAlarmRingView() //Alarm Snooze MENU
+        public int ShowSetSnoozePeriodView() => IO.SetSnoozePeriod();
+        public void ShowAlarmRingView() // Task-N/A when alarmRangedIndex is -1
         {
             Alarm alarm = Alarm._listOfAlarms![alarmRangedIndex];
             alarmRangedIndex = -1;
             UpdateSnoozeOption();
 
-            if (IO.GetYesOrNoInput($"Do you want to snooze your {alarm.AlarmName} alarm.")) //Prompt user for the snooze period
-            {
-                SnoozeAlarm(alarm, ShowChangeSnoozePeriodView());
+            if (IO.GetYesOrNoInput($"Do you want to snooze your {alarm.AlarmName} alarm.")){
+                SnoozeAlarm(alarm, ShowSetSnoozePeriodView()); //Prompt user for the snooze period
             }
             else //Go based on the alarms repeat option
             {
@@ -154,10 +150,9 @@ namespace Alarm501_Console
 
         public void UpdateSnoozeOption()
         {
-            if(alarmRangedIndex != -1)
-            {
+            if(alarmRangedIndex != -1){
                 Alarm alarm = Alarm._listOfAlarms![alarmRangedIndex];
-                IO.TaskOptions[TaskOption.MainMenuTasks].Insert(0, "Take Action On The Alarm That Just Ranged");
+                IO.TaskOptions[TaskOption.MainMenuTasks].Insert(0, "Take Action On The Alarm That Just Rang");
             }
             else
             {
@@ -190,7 +185,10 @@ namespace Alarm501_Console
                 switch (IO.GetTaskInput(TaskOption.Add_EditAlarmMainTasks))
                 {
                     case "Update Alarm Time":
-                        dateTime = IO.GetTimeInput();
+                        DateTime timeToSet = IO.GetTimeInput();
+                        if (timeToSet.Ticks == 1) break;
+
+                        dateTime = timeToSet;
                         break;
                     case "Update Alarm Repeat Option":
                         repeatOption = IO.GetRepeatOptionInput();
@@ -205,20 +203,18 @@ namespace Alarm501_Console
                     case "Update Alarm Active State":
                         isOn = (IO.GetTaskInput(TaskOption.SetAlarmActiveState) == "On") ? true :false ;
                         break;
-
                     case "Publish Alarm":
                         Alarm? alarm = new Alarm(dateTime, isOn, alarmSound, alarmName, repeatOption);
                         AddAlarm(alarm);
                         return;
                     case "Cancel":
                         IO.DisplayCurrentAlarms();
-
                         return;
                 }
             }
         }
 
-        public int ShowSelectAlarmView() //This is closed till delegates are setup
+        public int ShowSelectAlarmView()
         {
             if (Alarm._listOfAlarms!.Count == 0) return -1;
             IO.TaskOptions[TaskOption.SelectAlarmTasks] = Alarm._listOfAlarms.Select(alarm => alarm.AlarmTimeFormat).Concat(new[] { "Cancel", "Select Alarm Menu" }).ToList();
