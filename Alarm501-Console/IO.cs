@@ -12,7 +12,6 @@ namespace Alarm501_Console
     {
         public static Dictionary<TaskOption, List<string>> TaskOptions = new Dictionary<TaskOption, List<string>>() //Last element in dictionary is the location.
         {
-
             [TaskOption.MainMenuTasks] = new List<string>{ "Add Alarm", "Edit Alarm", "Delete A Alarm", "Quit", "Main Menu"},
             [TaskOption.Add_EditAlarmMainTasks] = new List<string>{ "Update Alarm Name", "Update Alarm Active State", "Update Alarm Time", "Update Alarm Sound", "Update Alarm Repeat Option", "Publish Alarm", "Cancel", "Add/Edit Alarm Menu", },
             [TaskOption.SelectAlarmTasks] = new List<string>{}, //Manually Refreshed.
