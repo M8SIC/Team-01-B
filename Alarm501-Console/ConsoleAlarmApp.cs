@@ -13,7 +13,7 @@ namespace Alarm501_Console
     public class ConsoleAlarmApp
     {
         #region Fields/Property/Events
-        private int alarmRangedIndex = -1;
+        private int alarmRungIndex = -1;
         private int lastSelectedIndex = -1; //return from universal set of ALARMS
 
         private SendAlarmFuncWithSnoozeTime SnoozeAlarm;
@@ -64,6 +64,8 @@ namespace Alarm501_Console
                         ShowDeleteView();
                         break;
                 }
+
+                UpdateSnoozeOption();
             }
         }
 
@@ -78,6 +80,8 @@ namespace Alarm501_Console
                 if (AlarmIndexSelected == -2) { IO.DisplayCurrentAlarms(); return; } //-2 is cancel
 
                 DeleteAlarm(new List<int>() { AlarmIndexSelected });
+                alarmRungIndex = (AlarmIndexSelected == alarmRungIndex) ? -1 : (AlarmIndexSelected < alarmRungIndex) ? alarmRungIndex-1 : alarmRungIndex;
+
                 IO.DisplayCurrentAlarms();
 
             } while (Alarm._listOfAlarms!.Count != 0 && IO.GetYesOrNoInput("Do you want to delete another alarm?"));
@@ -90,7 +94,6 @@ namespace Alarm501_Console
             int AlarmIndexSelected = ShowSelectAlarmView();
             if (AlarmIndexSelected == -1) { IO.Display("You can't edit, no alarms exist."); return; }
             if (AlarmIndexSelected == -2) { IO.DisplayCurrentAlarms(); return; } //-2 is cancel
-
 
             Alarm? alarm = Alarm._listOfAlarms![AlarmIndexSelected];
 
@@ -132,11 +135,12 @@ namespace Alarm501_Console
             }
          
         }
-        public int ShowSetSnoozePeriodView() => IO.SetSnoozePeriod();
-        public void ShowAlarmRingView() // Task-N/A when alarmRangedIndex is -1
+        public int ShowSetSnoozePeriodView() => IO.SetSnoozePeriod(); //Method Renamed
+
+        public void ShowAlarmRingView() // Task-N/A when alarmRungIndex is -1
         {
-            Alarm alarm = Alarm._listOfAlarms![alarmRangedIndex];
-            alarmRangedIndex = -1;
+            Alarm alarm = Alarm._listOfAlarms![alarmRungIndex];
+            alarmRungIndex = -1;
             UpdateSnoozeOption();
 
             if (IO.GetYesOrNoInput($"Do you want to snooze your {alarm.AlarmName} alarm.")){
@@ -150,19 +154,19 @@ namespace Alarm501_Console
 
         public void UpdateSnoozeOption()
         {
-            if(alarmRangedIndex != -1){
-                Alarm alarm = Alarm._listOfAlarms![alarmRangedIndex];
-                IO.TaskOptions[TaskOption.MainMenuTasks].Insert(0, "Take Action On The Alarm That Just Rang");
+            if(alarmRungIndex != -1){
+                Alarm alarm = Alarm._listOfAlarms![alarmRungIndex];
+                IO.TaskOptions[TaskOption.MainMenuTasks] = new List<string> { "Take Action On The Alarm That Just Rang", "Add Alarm", "Edit Alarm", "Delete A Alarm", "Quit", "Main Menu" };
             }
             else
             {
-                IO.TaskOptions[TaskOption.MainMenuTasks].RemoveAt(0);
+                IO.TaskOptions[TaskOption.MainMenuTasks] = new List<string> { "Add Alarm", "Edit Alarm", "Delete A Alarm", "Quit", "Main Menu" };
             }
           
         }
         public void NotifyAlarmRingView(Alarm alarm) //Display that a alarm ringed
         {
-            alarmRangedIndex = Alarm._listOfAlarms!.IndexOf(alarm);
+            alarmRungIndex = Alarm._listOfAlarms!.IndexOf(alarm);
 
             Console.WriteLine("------------");
             Console.WriteLine($"Your {alarm.AlarmName} Alarm Just Went Off!\nPlaying {alarm.AlarmSound} Sound\nGo Back To Menu/Refresh To Take Action!");
@@ -174,8 +178,8 @@ namespace Alarm501_Console
         {
             if(Alarm._listOfAlarms!.Count >= 5) { IO.Display("You can't add more alarms, 5 is the max."); return; }
 
-            DateTime dateTime = DateTime.Now;
-            bool isOn = false;
+            DateTime dateTime = DateTime.Now.AddSeconds(10);
+            bool isOn = true;
             AlarmSound alarmSound = AlarmSound.Radar;
             string alarmName = "No Name";
             string repeatOption = "None";
